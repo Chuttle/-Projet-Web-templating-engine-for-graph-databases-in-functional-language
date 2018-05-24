@@ -1,7 +1,6 @@
 import System.Environment
 import Data.List (find)
-import HTMLBuilder
-
+import HTMLBuilder 
 -- les fonctions de tri/recherche
 f :: [Relation] -> String -> [Relation]
 f g e = filter (\(x,y,z) -> x==e) g

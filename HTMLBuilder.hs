@@ -1,27 +1,75 @@
 module HTMLBuilder
         (creerPage
         ,Relation
-        ,Infos
-        ,Style
-        ,Type
+        ,Infos (..)
+        ,Style (..)
+        ,Type (..)
+        ,Parameter (..)
         )where
 
 type Relation = (String, String, String)
 type Infos = (String, Type, String)
-data Style = Style String String String String String String String String String String String String String String String String String deriving (Show, Eq,Read)
 data Type = Description | Image | HTMLType deriving (Show,Enum, Eq,Read)
 
-defaultstyle = (Style "<html> <head>  <title>" "</title> </head> <body>  <h1>"  "</h1>"  "<section id=descriptifs>"  "<p>" "</p>"  "<img src=\""  "\" alt=\""  " \" >"  "</section>"  "<section id=relation>"  "<p>"  ": <a href=\""  ".html\">"  "</a></p>"  "</section>"  " </body></html>")
+data Style = Node String [Parameter] [Style] 
+                | Text String  
+                | Title  
+                | IterateRelation [Style] 
+                | LinkName 
+                | LinkTarget 
+                | IterateInfos Type [Style] 
+                | Info deriving (Show,Read)
+           
+-- | represent a parameter in a HTML document
+-- use P for a string and L for a link
 
+data Parameter = P String String
+               | L String
+               | T String
+               | I String deriving (Show,Read)
+
+
+defaultstyle = (Node "html" [] [
+                      Node "head" [] [
+                          Node "title" [] [
+                              Text "le titre de la page est: "
+                              ,Title
+                              ]
+                          ]
+                      ,Node "body" [] [
+                            Node "h1" [] [Title]
+                            ,IterateInfos Description [
+                                Node "p" [] [
+                                    Text "Une description est :"
+                                    ,Info
+                                    ]
+                                ]
+                            ,IterateInfos Image [
+                                Node "img" [I "src", T "alt" ] []
+                                ]
+                            ,IterateRelation[
+                                Node "p" [] [
+                                    Text "a pour " 
+                                    ,LinkName
+                                    ,Text ": "
+                                    ,Node "a" [L "href"] [
+                                        LinkTarget
+                                        ]
+                                    ]
+                                ]
+                            ]
+                             
+                      ]
+                )
 
 creerPage :: String -> [Relation] -> [Infos] -> [(String, Style)] -> String
-creerPage subject rel infos style = creationPage subject rel infos (getStyleFromSubject subject infos style)
+creerPage subject rel infos style = creationPage subject (myfilter subject rel) (myfilter subject infos) (getStyleFromSubject subject infos style)
 
 getStyleFromSubject :: String -> [Infos] -> [(String, Style)] -> Style
 getStyleFromSubject _ [] styles = getStyleFromName "default" styles
 getStyleFromSubject subject ((a, b, c):infos) styles = if a==subject && b==HTMLType
-                                                     then getStyleFromName c styles
-                                                     else getStyleFromSubject subject infos styles
+                                                       then getStyleFromName c styles
+                                                       else getStyleFromSubject subject infos styles
 
 getStyleFromName :: String -> [(String, Style)] -> Style
 getStyleFromName _ [] = defaultstyle
@@ -29,41 +77,38 @@ getStyleFromName name ((currentName, currentStyle):styles)
    |name == currentName = currentStyle
    |otherwise           = getStyleFromName name styles
 
-sectionRelat :: String -> [Relation] -> Style -> String
-sectionRelat subject rel style = section (creationLien subject rel style) style
-        where section [] _ = []
-              section links (Style _ _ _ _ _ _ _ _ _ _ dbtsection _ _ _ _ finsection _) = concat [dbtsection,links,finsection]
-
+myfilter :: String -> [(String, a, b)] -> [(String, a, b)]
+myfilter _ [] = []
+myfilter subject ((a, b, c):infos) = if a==subject
+                                     then (a,b,c):(myfilter subject infos)
+                                     else myfilter subject infos
 
 creationPage :: String -> [Relation] -> [Infos] -> Style -> String
-creationPage subject rel infos (style@(Style dbtHeader finHeader finTitre _ _ _ _ _ _ _ _ _ _ _ _ _ finPage)) = concat [dbtHeader, subject, finHeader, subject, finTitre, sectionDesc subject infos style, sectionRelat subject rel style, finPage]
+creationPage subject rel infos style = printNode subject rel infos style
+
+
+printNode :: String -> [Relation] -> [Infos] -> Style -> String
+printNode subject rel                  infos (Node name params [])             = concat ["<", name, printParams subject rel infos params, "/>"]
+printNode subject rel                  infos (Node name params nodes)          = concat (concat [["<", name, printParams subject rel infos params,">"], map (printNode subject rel infos) nodes, ["</", name, ">"]])
+printNode subject rel                  infos (Text content)                    = content
+printNode subject rel                  infos (Title)                           = subject
+printNode subject []                   infos (IterateRelation nodes)           = []
+printNode subject (rels@(_:otherrels)) infos thisnodes@(IterateRelation nodes) = concat (concat [map (printNode subject rels infos) nodes, [printNode subject otherrels infos thisnodes]])
+printNode subject ((_,name,_):_)       infos (LinkName)                        = name
+printNode subject ((_,_,target):_)     infos (LinkTarget)                      = target
+printNode subject rel                  []    (IterateInfos _ nodes)            = []
+printNode subject rel (infos@((_,Description,_):otherinfos)) thisnodes@(IterateInfos Description nodes) = concat (concat [map (printNode subject rel infos) nodes, [printNode subject rel otherinfos thisnodes]])
+printNode subject rel (infos@((_,Image,_):otherinfos))       thisnodes@(IterateInfos Image nodes)       = concat ( concat [map (printNode subject rel infos) nodes, [printNode subject rel otherinfos thisnodes]])
+printNode subject rel (_:infos)                              thisnodes@(IterateInfos _ nodes)           = printNode subject rel infos thisnodes
+printNode subject rel ((_,_,value):_)                        (Info)                                     = value
 
 
 
-creationLien :: String -> [Relation] -> Style -> String
-creationLien _ [] _= ""
-creationLien subject ((a,b,c):xs) style@(Style _ _ _ _ _ _ _ _ _ _ _ _ template1 template2 template3 _ _)= if a==subject 
-                                                                                                     then concat [b,template1,c,template2,c,template3, creationLien subject xs style]
-                                                                                                     else creationLien subject xs style
 
-sectionDesc :: String -> [Infos] -> Style -> String
-sectionDesc _ [] _ = []
-sectionDesc subject infos style = section (concat [creationDescription subject infos style,insertionImage subject infos style]) style
-        where section [] _ = []
-              section content (Style _ _ _ dbtsection _ _ _ _ _ finsection _ _ _ _ _ _ _) = concat [dbtsection,content,finsection]
-
-
-creationDescription :: String -> [Infos] -> Style -> String
-creationDescription _ [] _= ""
-creationDescription subject ((a,b,c):xs) style@(Style _ _ _ _ dbtParagraphe finParagraphe _ _ _ _ _ _ _ _ _ _ _)= if a==subject && b==Description
-                                                                                                            then concat [dbtParagraphe,c,finParagraphe, creationDescription subject xs style]
-                                                                                                            else creationDescription subject xs style
-
-
-insertionImage :: String -> [Infos] -> Style -> String
-insertionImage _ [] _= ""
-insertionImage subject ((a,b,c):xs) style@(Style _ _ _ _ _ _ dbtImage sepImage fin _ _ _ _ _ _ _ _)= if a==subject && b==Image
-                                                                                               then concat [dbtImage,c,sepImage, subject, fin, insertionImage subject xs style]
-                                                                                               else insertionImage subject xs style
-
+printParams :: String -> [Relation] -> [Infos] -> [Parameter] -> String
+printParams _ _ _ [] = []
+printParams subject rel infos ((P name value):params) = concat [" ", name, " = ", value, printParams subject rel infos params]
+printParams subject rel infos ((T name ):params) = concat [" ", name, " = \"", subject, "\"", printParams subject rel infos params]
+printParams subject (rel@((_,_,value):_)) infos ((L name):params) = concat [" ", name, " = \"",value, ".html\"", printParams subject rel infos params]
+printParams subject rel (infos@((_,_,value):_)) ((I name):params) = concat [" ", name, " = \"", value, "\"", printParams subject rel infos params]
 
