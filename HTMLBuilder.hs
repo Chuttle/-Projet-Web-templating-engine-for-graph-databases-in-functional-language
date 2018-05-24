@@ -7,8 +7,13 @@ module HTMLBuilder
         ,Parameter (..)
         )where
 
+-- all type and data
+-- | Relation links a subject and a target with a relation
 type Relation = (String, String, String)
+-- | Infos links a subject to some informations concerning the subject
 type Infos = (String, Type, String)
+-- | The informations can be a Description or a Picture or an appereance for the HTML page
+
 data Type = Description | Image | HTMLType deriving (Show,Enum, Eq,Read)
 
 data Style = Node String [Parameter] [Style] 
