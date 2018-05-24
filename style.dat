@@ -1,2 +1,64 @@
-[("style",Style "<html>\n <head>\n  <title>" "</title>\n </head>\n <body>\n  <h1>"  "</h1>\n"  "<section id=descriptifs>\n"  "<p>" "</p>\n"  "<p><img src=\""  "\" alt=\""  "\"></p>\n"  "</section>\n"  "<section id=relation>\n"  "<p>"  ": <a href=\""  ".html\">"  "</a></p>\n"  "</section>\n"  " </body>\n</html>\n"),
-("default",Style "<html>\n <head>\n  <title>"  "</title>\n </head>\n <body>\n  <h1>"  "</h1>\n"  "<section id=descriptifs>\n"  "<h2>" "</h2>\n"  "<p><img src=\""  "\" alt=\""  "\"></p>\n"  "</section>\n"  "<section id=relation>\n"  "<p>"  ": <a href=\""  ".html\">"  "</a></p>\n"  "</section>\n"  " </body></html>\n")]
+[("style",(Node "html" [] [
+    Node "head" [] [
+        Node "title" [] [
+            Title
+            ]
+        ]
+    ,Node "body" [] [
+        Node "h1" [] [
+            Text "le titre de la page style est: "
+            ,Title
+            ]
+        ,IterateInfos Description [
+            Node "p" [] [
+                Text "Une description est :"
+                ,Info
+                ]
+            ]
+        ,IterateInfos Image [
+            Node "img" [I "src", T "alt" ] []
+            ]
+        ,IterateRelation[
+            Node "p" [] [
+                Text "a pour " 
+                ,LinkName
+                ,Text ": "
+                ,Node "a" [L "href"] [
+                    LinkTarget
+                    ]
+                ]
+            ]
+        ]
+    ])),
+("default",(Node "html" [] [
+    Node "head" [] [
+        Node "title" [] [
+            Title
+            ]
+        ]
+    ,Node "body" [] [
+        Node "h1" [] [
+            Text "le titre de la page default est: "
+            ,Title
+            ]
+        ,IterateInfos Description [
+            Node "p" [] [
+                Text "Une description est :"
+                ,Info
+                ]
+            ]
+        ,IterateInfos Image [
+            Node "img" [I "src", T "alt" ] []
+            ]
+        ,IterateRelation[
+            Node "p" [] [
+                Text "a pour " 
+                ,LinkName
+                ,Text ": "
+                ,Node "a" [L "href"] [
+                    LinkTarget
+                    ]
+                ]
+            ]
+        ]
+    ]))]

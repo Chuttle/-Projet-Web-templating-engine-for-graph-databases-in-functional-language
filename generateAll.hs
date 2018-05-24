@@ -1,9 +1,15 @@
 import System.Environment
 import Data.List (find)
-import HTMLBuilder
+
+import HTMLBuilder 
+
+-- les fonctions de tri/recherche
+f :: [Relation] -> String -> [Relation]
+f g e = filter (\(x,y,z) -> x==e) g
 
 -- sorting and searching functions
 -- | getFirst returns the first element of a Relation
+
 getFirst :: Relation -> String
 getFirst (s,r,p) = s
 

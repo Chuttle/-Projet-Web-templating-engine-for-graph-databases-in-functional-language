@@ -1,1 +1,8 @@
-[("subject",Description,"le sujet"),("subject",Image,"tank.png"),("subject",Image,"tank2.png"),("test",Description,"test"),("test",HTMLType,"style"),("propertie",Description,"chocolat"),("propertie2",Description,"Destiny"),("Haskell",Description,"Langage de programmation fonctionnel")]
+[("subject",Description,"le sujet"),
+("subject",Image,"tank.png"),
+("subject",Image,"tank2.png"),
+("test",Description,"test"),
+("test",HTMLType,"style"),
+("propertie",Description,"chocolat"),
+("propertie2",Description,"Destiny"),
+("Haskell",Description,"Langage de programmation fonctionnel")]
