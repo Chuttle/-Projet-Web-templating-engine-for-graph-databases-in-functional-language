@@ -1,5 +1,4 @@
 import Network
-import Network.Socket
 import System.IO
 import System.Environment
 import Data.List (find)
