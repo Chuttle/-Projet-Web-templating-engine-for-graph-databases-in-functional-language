@@ -35,6 +35,13 @@
   (major1) == 1 && (major2) <  0 || \
   (major1) == 1 && (major2) == 0 && (minor) <= 3)
 
+/* package split-0.2.3.3 */
+#define VERSION_split "0.2.3.3"
+#define MIN_VERSION_split(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  2 || \
+  (major1) == 0 && (major2) == 2 && (minor) <= 3)
+
 /* tool alex-3.1.4 */
 #define TOOL_VERSION_alex "3.1.4"
 #define MIN_TOOL_VERSION_alex(major1,major2,minor) (\
@@ -105,5 +112,5 @@
   (major1) == 2 && (major2) <  25 || \
   (major1) == 2 && (major2) == 25 && (minor) <= 0)
 
-#define CURRENT_PACKAGE_KEY "Webte_5dV2qkVqxa7AOvm1XYQfwQ"
+#define CURRENT_PACKAGE_KEY "Webte_B5YPPjBVKjlFfjfWVEXKOr"
 

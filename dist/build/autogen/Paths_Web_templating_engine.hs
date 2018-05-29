@@ -17,9 +17,9 @@ version = Version [0,1] []
 bindir, libdir, datadir, libexecdir, sysconfdir :: FilePath
 
 bindir     = "C:\\Users\\louis\\AppData\\Roaming\\cabal\\bin"
-libdir     = "C:\\Users\\louis\\AppData\\Roaming\\cabal\\x86_64-windows-ghc-7.10.3\\Web-templating-engine-0.1-5dV2qkVqxa7AOvm1XYQfwQ"
+libdir     = "C:\\Users\\louis\\AppData\\Roaming\\cabal\\x86_64-windows-ghc-7.10.3\\Web-templating-engine-0.1-B5YPPjBVKjlFfjfWVEXKOr"
 datadir    = "C:\\Users\\louis\\AppData\\Roaming\\cabal\\x86_64-windows-ghc-7.10.3\\Web-templating-engine-0.1"
-libexecdir = "C:\\Users\\louis\\AppData\\Roaming\\cabal\\Web-templating-engine-0.1-5dV2qkVqxa7AOvm1XYQfwQ"
+libexecdir = "C:\\Users\\louis\\AppData\\Roaming\\cabal\\Web-templating-engine-0.1-B5YPPjBVKjlFfjfWVEXKOr"
 sysconfdir = "C:\\Users\\louis\\AppData\\Roaming\\cabal\\etc"
 
 getBinDir, getLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
