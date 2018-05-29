@@ -10,12 +10,14 @@ module HTMLBuilder
 -- all type and data
 -- | Relation links a subject and a target with a relation
 type Relation = (String, String, String)
+
 -- | Infos links a subject to some informations concerning the subject
 type Infos = (String, Type, String)
--- | The informations can be a Description or a Picture or an appereance for the HTML page
 
+-- | The informations can be a Description or a Picture or an appereance for the HTML page
 data Type = Description | Image | HTMLType deriving (Show,Enum, Eq,Read)
 
+-- | Style defines the appereance for the HTML page with specifics tags
 data Style = Node String [Parameter] [Style] 
                 | Text String  
                 | Title  
@@ -27,13 +29,12 @@ data Style = Node String [Parameter] [Style]
            
 -- | represent a parameter in a HTML document
 -- use P for a string and L for a link
-
 data Parameter = P String String
                | L String
                | T String
                | I String deriving (Show,Read)
 
-
+-- a default style
 defaultstyle = (Node "html" [] [
                       Node "head" [] [
                           Node "title" [] [
@@ -67,31 +68,36 @@ defaultstyle = (Node "html" [] [
                       ]
                 )
 
+-- | creerPage takes a subject and the graphs as parameters and return the html code for the page associated to the subject
 creerPage :: String -> [Relation] -> [Infos] -> [(String, Style)] -> String
 creerPage subject rel infos style = creationPage subject (myfilter subject rel) (myfilter subject infos) (getStyleFromSubject subject infos style)
 
+-- | search the style associated to the subject in the graphs and returns it
 getStyleFromSubject :: String -> [Infos] -> [(String, Style)] -> Style
 getStyleFromSubject _ [] styles = getStyleFromName "default" styles
 getStyleFromSubject subject ((a, b, c):infos) styles = if a==subject && b==HTMLType
                                                        then getStyleFromName c styles
                                                        else getStyleFromSubject subject infos styles
 
+-- | search the style associated to the name in the style graph and returns it
 getStyleFromName :: String -> [(String, Style)] -> Style
 getStyleFromName _ [] = defaultstyle
 getStyleFromName name ((currentName, currentStyle):styles) 
    |name == currentName = currentStyle
    |otherwise           = getStyleFromName name styles
 
+-- | takes a parameter and a list, search in the list if the second element of a triplet is equal to the parameter and return a list
 myfilter :: String -> [(String, a, b)] -> [(String, a, b)]
 myfilter _ [] = []
 myfilter subject ((a, b, c):infos) = if a==subject
                                      then (a,b,c):(myfilter subject infos)
                                      else myfilter subject infos
 
+-- | takes a subject, the graphs and the style of this subject and return the html code of this page
 creationPage :: String -> [Relation] -> [Infos] -> Style -> String
 creationPage subject rel infos style = printNode subject rel infos style
 
-
+-- | read the Style graph and concat all parts to create the html code
 printNode :: String -> [Relation] -> [Infos] -> Style -> String
 printNode subject rel                  infos (Node name params [])             = concat ["<", name, printParams subject rel infos params, "/>"]
 printNode subject rel                  infos (Node name params nodes)          = concat (concat [["<", name, printParams subject rel infos params,">"], map (printNode subject rel infos) nodes, ["</", name, ">"]])
@@ -107,13 +113,10 @@ printNode subject rel (infos@((_,Image,_):otherinfos))       thisnodes@(IterateI
 printNode subject rel (_:infos)                              thisnodes@(IterateInfos _ nodes)           = printNode subject rel infos thisnodes
 printNode subject rel ((_,_,value):_)                        (Info)                                     = value
 
-
-
-
+-- | puts parameters in the html code where it needs to be
 printParams :: String -> [Relation] -> [Infos] -> [Parameter] -> String
 printParams _ _ _ [] = []
 printParams subject rel infos ((P name value):params) = concat [" ", name, " = ", value, printParams subject rel infos params]
 printParams subject rel infos ((T name ):params) = concat [" ", name, " = \"", subject, "\"", printParams subject rel infos params]
 printParams subject (rel@((_,_,value):_)) infos ((L name):params) = concat [" ", name, " = \"",value, ".html\"", printParams subject rel infos params]
 printParams subject rel (infos@((_,_,value):_)) ((I name):params) = concat [" ", name, " = \"", value, "\"", printParams subject rel infos params]
-
