@@ -1,3 +1,4 @@
+-- | create a module with the following function available
 module HTMLBuilderUtils 
       (getSujets
       ,shrinkToUniq

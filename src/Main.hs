@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+-- | create a Module Main
 module Main where
 
 import           HTMLBuilderUtils
