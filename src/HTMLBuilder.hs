@@ -1,3 +1,4 @@
+-- | All the data and type needed to the function
 module HTMLBuilder
         (creerPage
         ,Relation
