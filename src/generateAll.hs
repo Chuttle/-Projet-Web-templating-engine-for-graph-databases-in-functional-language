@@ -1,7 +1,7 @@
 import System.Environment
-
 import HTMLBuilderUtils
 import HTMLBuilder 
+-- | generate HTML page using 3 graphs (graph.dat,infos.dat,style.dat)
 
 -- les fonctions de tri/recherche
 f :: [Relation] -> String -> [Relation]
