@@ -18,7 +18,18 @@ type Infos = (String, Type, String)
 -- | The informations can be a Description or a Picture or an appereance for the HTML page
 data Type = Description | Image | HTMLType deriving (Show,Enum, Eq,Read)
 
--- | Style defines the appereance for the HTML page with specifics tags
+-- | Style defines the appereance for the HTML page
+-- Syntax: 
+--
+-- Node nom [Parameter] [Style] -> représente une balise HTML. nom est le nom de la balise entre guillemets, [Parameter] est une liste d'attributs de la balise comme décrit plus bas, et Style est une liste des Noeuds qui seront dans la balise.
+-- Text texte -> insère un texte de votre choix
+-- Title  -> insère le titre de la page
+-- IterateRelation [Style]  -> permet de reproduire une fois par relation la série de balise contenue
+-- LinkName -> permet d'insérer le nom de la première relation active. Utilisable dans un noeud IterateRelation
+-- LinkTarget -> permet d'insérer la cible de la première relation active. Utilisable dans un noeud IterateRelation 
+-- IterateInfos Type [Style] -> permet de reproduire une fois par élément du fichier info du type précisé la série de balise contenue
+-- Info -> permet d'insérer la cible de la première Info active. Utilisable dans un noeud IterateInfos
+-- 
 data Style = Node String [Parameter] [Style] 
                 | Text String  
                 | Title  
@@ -30,10 +41,10 @@ data Style = Node String [Parameter] [Style]
            
 -- | represent a parameter in a HTML document
 -- use P for a string and L for a link
-data Parameter = P String String
-               | L String
-               | T String
-               | I String deriving (Show,Read)
+data Parameter = Param String String
+               | Link String
+               | TitleP String
+               | InfoP String deriving (Show,Read)
 
 -- a default style
 defaultstyle = (Node "html" [] [
@@ -52,14 +63,14 @@ defaultstyle = (Node "html" [] [
                                     ]
                                 ]
                             ,IterateInfos Image [
-                                Node "img" [I "src", T "alt" ] []
+                                Node "img" [InfoP "src", TitleP "alt" ] []
                                 ]
                             ,IterateRelation[
                                 Node "p" [] [
                                     Text "a pour " 
                                     ,LinkName
                                     ,Text ": "
-                                    ,Node "a" [L "href"] [
+                                    ,Node "a" [Link "href"] [
                                         LinkTarget
                                         ]
                                     ]
@@ -117,7 +128,7 @@ printNode subject rel ((_,_,value):_)                        (Info)             
 -- | puts parameters in the html code where it needs to be
 printParams :: String -> [Relation] -> [Infos] -> [Parameter] -> String
 printParams _ _ _ [] = []
-printParams subject rel infos ((P name value):params) = concat [" ", name, " = ", value, printParams subject rel infos params]
-printParams subject rel infos ((T name ):params) = concat [" ", name, " = \"", subject, "\"", printParams subject rel infos params]
-printParams subject (rel@((_,_,value):_)) infos ((L name):params) = concat [" ", name, " = \"",value, ".html\"", printParams subject rel infos params]
-printParams subject rel (infos@((_,_,value):_)) ((I name):params) = concat [" ", name, " = \"", value, "\"", printParams subject rel infos params]
+printParams subject rel infos ((Param name value):params) = concat [" ", name, " = ", value, printParams subject rel infos params]
+printParams subject rel infos ((TitleP name ):params) = concat [" ", name, " = \"", subject, "\"", printParams subject rel infos params]
+printParams subject (rel@((_,_,value):_)) infos ((Link name):params) = concat [" ", name, " = \"",value, ".html\"", printParams subject rel infos params]
+printParams subject rel (infos@((_,_,value):_)) ((InfoP name):params) = concat [" ", name, " = \"", value, "\"", printParams subject rel infos params]

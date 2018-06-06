@@ -1,3 +1,4 @@
+module Main where
 import System.Environment
 
 import HTMLBuilderUtils
@@ -5,7 +6,7 @@ import HTMLBuilder
 
 -- les fonctions de tri/recherche
 f :: [Relation] -> String -> [Relation]
-f g e = filter (\(x,y,z) -> x==e) g
+f g e = filter (\(x,_,_) -> x==e) g
 
 
 -- writing function
