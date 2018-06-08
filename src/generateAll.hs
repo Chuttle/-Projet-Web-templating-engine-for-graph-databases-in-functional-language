@@ -4,11 +4,6 @@ import HTMLBuilderUtils
 import HTMLBuilder 
 
 
--- writing function
--- | writer create a HTML page using the graphs and the subject of this page
-writer :: [Relation] -> [Infos] -> [(String,Style)] -> String -> IO()
-writer graph infos styles subject = writeFile (concat[subject,".html"]) (creerPage subject graph  infos styles)
-
 
 -- le main
 -- | read all graphs, get the subjects and create the HTML Page linked to these subjects

@@ -13,21 +13,21 @@ Ces deux éxécutables sont aussi dispobibles dans les dossier dist/build/Web-Temp
 
 2) Utiliser d'une autre manière les outils de l'HTMLBuilder
 
-Pour réutiliser le code, il faut d'importer le module HTMLBuilder entièrement, puis utiliser la fonction creerPage.
+Pour réutiliser le code, il faut importer le module HTMLBuilder entièrement, puis utiliser la fonction creerPage.
 
 
 3) Format à utiliser pour les données à entrer:
 
-- graph.dat : chaque relation sera écrite sous la forme (premier élément, nom de la relation, deuxième élément), chaque élément étant entre doubles guillemets et les relations séparées par des virgules et le tout est mis entre crochets.
-Dans le futur il pourra être envisagé d'automatiser la création de ce fichier.
+- graph.dat : chaque relation sera écrite sous la forme (premier élément, nom de la relation, deuxième élément), chaque élément étant entre guillemets et les relations séparées par des virgules et le tout est mis entre crochets.
+Dans le futur, il pourra être envisagé d'automatiser la création de ce fichier.
 
 
-- infos.dat : ce fichier sera de la même forme que graph.dat, si ce n'est que le premier élément doit être dans le premier graph, le second est soit HTMLType (pour lier une page et un style, voir plus bas), soit Description (le dernier paramètre sera alors un texte, soit Image (le dernier paramètre sera alors le lien vers une image).
+- infos.dat : ce fichier sera de la même forme que graph.dat, si ce n'est que le premier élément doit être dans le premier graphe, le second est soit HTMLType (pour lier une page et un style, voir plus bas), soit Description (le dernier paramètre sera alors un texte, soit Image (le dernier paramètre sera alors le lien vers une image).
 le deuxième élément n'est pas entre guillemets.
-Dans le futur, ouvrir les possibilités pour le deuxième élément pourra être faisable.
+Dans le futur, il sera possible d'ajouter d'autres options pour le deuxième élément.
 
 - style.dat : ce fichier décrit les pages HTML qui seront générées.
-Chaque style est composé d'un nom (entre guillemets) et d'un noeud, qui contient l'ensemble de la page. Chaque style est entre parenthèses et ils sont séparés par des virgules, l'nsemble est entre crochet.
+Chaque style est composé d'un nom (entre guillemets) et d'un noeud, qui contient l'ensemble de la page. Chaque style est entre parenthèses et ils sont séparés par des virgules, l'ensemble est entre crochets.
 Plusieurs types de noeuds sont possibles:
 
 Node nom [Parameter] [Style] -> représente une balise HTML. nom est le nom de la balise entre guillemets, [Parameter] est une liste d'attributs de la balise comme décrit plus bas, et Style est une liste des Noeuds qui seront dans la balise.
