@@ -2,6 +2,7 @@
 ("subject",Image,"tank.png"),
 ("subject",Image,"tank2.png"),
 ("test",Description,"test"),
+("GEHIER",Description,"nul en Haskell"),
 ("test",HTMLType,"style"),
 ("propertie",Description,"chocolat"),
 ("propertie2",Description,"Destiny"),

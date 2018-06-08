@@ -1,4 +1,4 @@
-[("style",(Node "html" [] [
+[("style",Node "html" [] [
     Node "head" [] [
         Node "title" [] [
             Title
@@ -16,21 +16,21 @@
                 ]
             ]
         ,IterateInfos Image [
-            Node "img" [I "src", T "alt" ] []
+            Node "img" [InfoP "src", TitleP "alt" ] []
             ]
         ,IterateRelation[
             Node "p" [] [
                 Text "a pour " 
                 ,LinkName
                 ,Text ": "
-                ,Node "a" [L "href"] [
+                ,Node "a" [Link "href"] [
                     LinkTarget
                     ]
                 ]
             ]
         ]
-    ])),
-("default",(Node "html" [] [
+    ]),
+("default",Node "html" [] [
     Node "head" [] [
         Node "title" [] [
             Title
@@ -38,7 +38,7 @@
         ]
     ,Node "body" [] [
         Node "h1" [] [
-            Text "le titre de la page default est: "
+            Text "titre:  "
             ,Title
             ]
         ,IterateInfos Description [
@@ -48,17 +48,17 @@
                 ]
             ]
         ,IterateInfos Image [
-            Node "img" [I "src", T "alt" ] []
+            Node "img" [InfoP "src", TitleP "alt" ] []
             ]
         ,IterateRelation[
             Node "p" [] [
                 Text "a pour " 
                 ,LinkName
                 ,Text ": "
-                ,Node "a" [L "href"] [
+                ,Node "a" [Link "href"] [
                     LinkTarget
                     ]
                 ]
             ]
         ]
-    ]))]
+    ])]
